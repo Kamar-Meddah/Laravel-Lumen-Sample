@@ -15,6 +15,6 @@ $router->group(['prefix'=>'posts'],function () use($router){
 });
 
 $router->group(['prefix'=>'categories'], function () use ($router){
-    $router->get('all', CategoriesCon)
-})
+    $router->get('all', 'CategoriesController@all');
+});
 

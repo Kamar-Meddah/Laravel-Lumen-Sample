@@ -6,19 +6,19 @@ use App\Services\CategoriesService;
 use App\Services\PostsService;
 use Laravel\Lumen\Routing\Controller;
 
-class PostsController extends Controller
+class CategoriesController extends Controller
 {
-    private $postsService;
+    private $categoriesService;
 
-    public function __construct(PostsService $postsService )
+    public function __construct(CategoriesService $categoriesService )
     {
-        $this->postsService = $postsService;
+        $this->categoriesService = $categoriesService;
     }
 
     public function all()
     {
-        $posts = $this->postsService->all();
-        return response()->json($posts);
+        $categories = $this->categoriesService->all();
+        return response()->json($categories);
     }
 
 }
