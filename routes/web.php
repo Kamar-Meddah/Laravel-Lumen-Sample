@@ -11,7 +11,8 @@
 |
 */
 $router->group(['prefix'=>'posts'],function () use($router){
-    $router->get('all', 'PostsController@all');
+    $router->get('all/{page:\d+}', 'PostsController@all');
+    $router->get('allHome/{page:\d+}', 'PostsController@allHome');
 });
 
 $router->group(['prefix'=>'categories'], function () use ($router){

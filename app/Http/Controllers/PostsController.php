@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Services\CategoriesService;
 use App\Services\PostsService;
 use Laravel\Lumen\Routing\Controller;
 
@@ -15,9 +14,15 @@ class PostsController extends Controller
         $this->postsService = $postsService;
     }
 
-    public function all()
+    public function all($page)
     {
-        $posts = $this->postsService->all();
+        $posts = $this->postsService->all($page);
+        return response()->json($posts);
+    }
+
+    public function allHome($page)
+    {
+        $posts = $this->postsService->allHome($page);
         return response()->json($posts);
     }
 

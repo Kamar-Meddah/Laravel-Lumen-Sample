@@ -17,4 +17,8 @@ class Post extends Model
         return $this->belongsTo('App\Models\Category','category_id');
     }
 
+    public function resume(){
+        return substr($this->content,0,100);
+    }
+
 }
