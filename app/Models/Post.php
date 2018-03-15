@@ -9,7 +9,7 @@ class Post extends Model
     protected $table = 'posts';
     protected $primaryKey = 'id';
     protected $fillable = [
-        'title', 'content', 'category_id', 'created_at'
+        'title', 'content', 'category_id', 'created_at','slug'
     ];
 
     public function category()

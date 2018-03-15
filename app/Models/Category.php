@@ -8,7 +8,7 @@ class Category extends Model
 {
     protected $table = 'categories';
     protected $primaryKey = 'id';
-    protected $fillable = ['title'];
+    protected $fillable = ['title','slug'];
 
     public function posts()
     {

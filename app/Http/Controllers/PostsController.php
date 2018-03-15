@@ -37,4 +37,9 @@ class PostsController extends Controller
         return response()->json($posts);
     }
 
+    public function find(int $id){
+        $post =$this->postsService->find($id);
+        return response()->json($post);
+    }
+
 }

@@ -12,8 +12,10 @@
 */
 
 $factory->define(App\Models\Post::class, function (Faker\Generator $faker) {
+    $title = $faker->unique()->company;
     return [
-        'title' => $faker->unique()->company,
+        'title' => $title,
         'content' => $faker->realText(400),
+        'slug' => strtolower(str_replace(',', '', str_replace(' ', '-', trim($title)))),
     ];
 });

@@ -12,7 +12,9 @@
 */
 
 $factory->define(App\Models\Category::class, function (Faker\Generator $faker) {
+    $title = $faker->unique()->colorName;
     return [
-        'title' => $faker->unique()->colorName
+        'title' => $title,
+        'slug' => strtolower(str_replace(',', '', str_replace(' ', '-', trim($title)))),
     ];
 });

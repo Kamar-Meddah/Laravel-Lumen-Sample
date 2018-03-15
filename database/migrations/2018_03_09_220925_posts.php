@@ -17,6 +17,7 @@ class Posts extends Migration
             $table->increments('id');
             $table->timestamps();
             $table->string('title');
+            $table->string('slug');
             $table->longText('content');
             $table->unsignedInteger('category_id');
             $table->foreign('category_id')->references('id')->on('categories');
