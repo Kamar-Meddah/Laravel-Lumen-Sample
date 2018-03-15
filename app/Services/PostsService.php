@@ -24,12 +24,36 @@ class PostsService
         Post::destroy($id);
     }
 
-    public function allHome(int $page): ?object
+    public function last(int $page): ?object
     {
         $posts = Post::with('category')
+            ->orderByDesc('created_at')
             ->paginate(10, ['*'], null, $page);
         array_map(function ($post) {
-            $post->content = substr($post->content, 0, 100);
+            $post->content = substr($post->content, 0, 300);
+        }, $posts->items());
+        return $posts;
+    }
+
+    public function findByCategory(int $id, int $page): ?object
+    {
+        $posts = Post::with('category')
+            ->orderByDesc('created_at')
+            ->where('category_id', '=', $id)
+            ->paginate(10, ['*'], null, $page);
+        array_map(function ($post) {
+            $post->content = substr($post->content, 0, 300);
+        }, $posts->items());
+        return $posts;
+    }
+
+    public function search(string $query, int $page)
+    {
+        $posts = Post::with('category')
+            ->where('title', 'like', '%'.$query.'%')
+            ->paginate(10, ['*'], null, $page);
+        array_map(function ($post) {
+            $post->content = substr($post->content, 0, 300);
         }, $posts->items());
         return $posts;
     }

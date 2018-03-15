@@ -15,7 +15,7 @@ class CorsMiddleware
     public function handle($request, Closure $next)
     {
         $headers = [
-            'Access-Control-Allow-Origin'      => env('CORS_DOMAINE','http://localhost:8080'),
+            'Access-Control-Allow-Origin'      => env('CORS_DOMAINE','*'),
             'Access-Control-Allow-Methods'     => 'POST, GET, OPTIONS, PUT, DELETE',
             'Access-Control-Allow-Credentials' => 'true',
             'Access-Control-Max-Age'           => '86400',

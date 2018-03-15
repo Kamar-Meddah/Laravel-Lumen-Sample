@@ -10,7 +10,8 @@ class Category extends Model
     protected $primaryKey = 'id';
     protected $fillable = ['title'];
 
-    public function posts(){
-        return $this->hasMany('App\Models\Post');
+    public function posts()
+    {
+        return $this->hasMany('App\Models\Post', 'category_id', 'id');
     }
 }

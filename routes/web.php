@@ -12,7 +12,9 @@
 */
 $router->group(['prefix'=>'posts'],function () use($router){
     $router->get('all/{page:\d+}', 'PostsController@all');
-    $router->get('allHome/{page:\d+}', 'PostsController@allHome');
+    $router->get('last/{page:\d+}', 'PostsController@last');
+    $router->get('search/{query:[A-z0-9]+}/{page:\d+}', 'PostsController@search');
+    $router->get('lastByCatgory/{id:\d+}/{page:\d+}', 'PostsController@lastByCatgory');
 });
 
 $router->group(['prefix'=>'categories'], function () use ($router){
