@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class CreateUsersTable extends Migration
 {
@@ -21,6 +21,10 @@ class CreateUsersTable extends Migration
             $table->string('email');
             $table->timestamps();
         });
+        Schema::table('posts', function (Blueprint $table) {
+            $table->unsignedInteger('user_id');
+            $table->foreign('user_id')->references('id')->on('users');
+        });
     }
 
     /**
@@ -30,6 +34,9 @@ class CreateUsersTable extends Migration
      */
     public function down()
     {
+        Schema::table('posts', function (Blueprint $table) {
+            $table->dropForeign('posts_user_id_foreign');
+        });
         Schema::dropIfExists('users');
     }
 }

@@ -9,7 +9,7 @@ class Post extends Model
     protected $table = 'posts';
     protected $primaryKey = 'id';
     protected $fillable = [
-        'title', 'content', 'category_id', 'created_at', 'slug'
+        'title', 'content', 'category_id', 'slug'
     ];
 
     public function category()
@@ -20,6 +20,11 @@ class Post extends Model
     public function images()
     {
         return $this->hasMany(Image::class, 'image_id', 'id');
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id', 'id');
     }
 
 }
