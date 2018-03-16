@@ -22,7 +22,12 @@ class Post extends Model
 
     public function images()
     {
-        return $this->hasMany(Image::class, 'image_id', 'id');
+        return $this->hasMany(Image::class, 'post_id', 'id');
+    }
+
+    public function comments()
+    {
+        return $this->hasMany(Comment::class, 'post_id', 'id');
     }
 
     public function user()
