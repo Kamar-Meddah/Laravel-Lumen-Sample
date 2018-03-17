@@ -9,7 +9,7 @@ class Comment extends Model
     protected $table = 'comments';
     protected $primaryKey = 'id';
     protected $fillable = [
-        'content', 'post_id', 'updated_at'
+        'content', 'post_id', 'updated_at','user_id'
     ];
     protected $hidden = [
         'created_at'

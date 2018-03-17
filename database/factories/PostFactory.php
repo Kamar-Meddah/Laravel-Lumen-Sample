@@ -15,7 +15,9 @@ $factory->define(App\Models\Post::class, function (Faker\Generator $faker) {
     $title = $faker->unique()->company;
     return [
         'title' => $title,
-        'content' => $faker->realText(400),
-        'slug' => strtolower(str_replace(',', '', str_replace(' ', '-', trim($title)))),
+        'content' => $faker->paragraph(200),
+        'slug' => str_replace('\'','-',strtolower(str_replace(',', '', str_replace(' ', '-', trim($title))))),
+        //  'category_id' => factory(App\Models\Category::class)->create()->id,
+        //  'user_id' => factory(App\Models\User::class)->create()->id
     ];
 });

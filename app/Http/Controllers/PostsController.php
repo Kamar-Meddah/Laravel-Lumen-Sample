@@ -9,9 +9,11 @@ class PostsController extends Controller
 {
     private $postsService;
 
+
     public function __construct(PostsService $postsService)
     {
         $this->postsService = $postsService;
+
     }
 
     public function all(int $page)

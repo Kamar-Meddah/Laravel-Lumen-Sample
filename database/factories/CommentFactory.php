@@ -11,9 +11,10 @@
 |
 */
 
-$factory->define(App\User::class, function (Faker\Generator $faker) {
+$factory->define(App\Models\Comment::class, function (Faker\Generator $faker) {
     return [
-        'name' => $faker->name,
-        'email' => $faker->email,
+        'content' => $faker->text(),
+        //  'post_id' => factory(App\Models\Post::class)->create()->id,
+        //  'user_id' => factory(App\Models\User::class)->create()->id
     ];
 });

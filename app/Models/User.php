@@ -9,9 +9,9 @@ class User extends Model
     protected $table = 'users';
     protected $primaryKey = 'id';
     protected $fillable = [
-        'username', 'email', 'token'
+        'username', 'email', 'token', 'role'
     ];
-    protected $hidden = ['password'];
+    protected $hidden = ['password', 'token', 'role', 'updated_at'];
 
     public function posts()
     {

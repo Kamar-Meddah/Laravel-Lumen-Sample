@@ -11,10 +11,12 @@
 |
 */
 
-$factory->define(App\Models\Category::class, function (Faker\Generator $faker) {
-    $title = $faker->unique()->colorName;
+$factory->define(App\Models\Image::class, function (Faker\Generator $faker) {
+    $title = $faker->unique()->word;
     return [
         'title' => $title,
-        'slug' => str_replace('\'','-',strtolower(str_replace(',', '', str_replace(' ', '-', trim($title))))),
+        'path' => 'images/'.$title,
+        //  'post_id' => factory(App\Models\Post::class)->create()->id
+
     ];
 });

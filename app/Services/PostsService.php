@@ -15,8 +15,7 @@ class PostsService
 
     public function find(int $id): ?Post
     {
-        return Post::with('category')
-            ->find($id);
+        return Post::with('category', 'user','images')->find($id);
     }
 
     public function delete(int $id): void
@@ -47,10 +46,10 @@ class PostsService
         return $posts;
     }
 
-    public function search(string $query, int $page)
+    public function search(string $query, int $page): ?object
     {
         $posts = Post::with('category')
-            ->where('title', 'like', '%'.$query.'%')
+            ->where('title', 'like', '%' . $query . '%')
             ->paginate(10, ['*'], null, $page);
         array_map(function ($post) {
             $post->content = substr($post->content, 0, 300);
