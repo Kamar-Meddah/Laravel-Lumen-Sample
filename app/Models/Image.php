@@ -9,7 +9,7 @@ class Image extends Model
     protected $table = 'images';
     protected $primaryKey = 'id';
     protected $fillable = [
-        'title', 'post_id', 'updated_at','path'
+        'title', 'post_id', 'updated_at','src'
     ];
 
     public function post()

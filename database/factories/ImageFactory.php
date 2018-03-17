@@ -15,7 +15,7 @@ $factory->define(App\Models\Image::class, function (Faker\Generator $faker) {
     $title = $faker->unique()->word;
     return [
         'title' => $title,
-        'path' => 'images/'.$title,
+        'src' => 'files/images/'.$title,
         //  'post_id' => factory(App\Models\Post::class)->create()->id
 
     ];
