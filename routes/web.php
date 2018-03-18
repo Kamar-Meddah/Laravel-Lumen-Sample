@@ -25,6 +25,10 @@ $router->group(['prefix' => 'Api'], function () use ($router) {
         $router->get('all', 'CategoriesController@all');
     });
 
+    $router->group(['prefix' => 'auth'], function () use ($router) {
+        $router->post('signup', 'AuthController@signup');
+    });
+
     $router->group(['prefix' => 'comments'], function () use ($router) {
         $router->get('post/{id:\d+}', 'CommentsController@findAll');
         $router->post('post', 'CommentsController@post');

@@ -82,7 +82,8 @@ $app->singleton(
 $app->register(App\Providers\CommentsServiceProvider::class);
 $app->register(App\Providers\PostsServiceProvider::class);
 $app->register(App\Providers\CategoriesServiceProvider::class);
-// $app->register(App\Providers\AuthServiceProvider::class);
+$app->register(App\Providers\UsersServiceProvider::class);
+$app->register(App\Providers\AuthServiceProvider::class);
 // $app->register(App\Providers\EventServiceProvider::class);
 
 /*
