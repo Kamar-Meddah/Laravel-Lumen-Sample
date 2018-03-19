@@ -7,24 +7,32 @@ use Exception;
 
 class AuthService
 {
-    public function signup($username, $password, $email)
+
+    public function signin(?string $username, ?string $email, string $password)
     {
         try {
-            $usernameExist = User::all()->where('username', '=', $username)->first();
-            if ($usernameExist !== null) {
-                return 'username exist';
+            if ($email) {
+                $user = User::all()->where('email', '=', $username)->first();
+            } else {
+                $user = User::all()->where('username', '=', $username)->first();
             }
-            $emailExist = User::all()->where('email', '=', $email)->first();
-            if ($emailExist !== null) {
-                return 'email exist';
-            }
-            $user = new User();
-            $user->username = $username;
-            $user->email = $email;
-            $user->password = password_hash($password, 1);
-            return $user->saveOrFail();
+
+                if (password_verify($password, $user)) {
+                    $array = $user;
+                    $a = JWT::encode($array, env('APP_KEY'), 'HS256');
+                    $user->token = $a;
+                    $user->save();
+                }
+
+
         } catch (Exception $e) {
-            return false;
+            return 'do not exist';
         }
     }
+
+    public function findWith(string $column, string $value): bool
+    {
+        return User::all()->where($column, '=', $value)->first() !== null;
+    }
+
 }

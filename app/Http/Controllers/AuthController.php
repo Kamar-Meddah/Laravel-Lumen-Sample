@@ -16,11 +16,20 @@ class AuthController extends Controller
         $this->authService = $authService;
     }
 
-    public function signup(Request $request)
+
+
+    public function signin(Request $request)
     {
         $username = $request->get('username');
-        $email = $request->get('email');
         $password = $request->get('password');
-        return response()->json(["created" => $this->authService->signup($username, $password, $email)]);
+        $res =null;
+
+        if (preg_match('/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/', $username)) {
+            $res = $this->authService->signin(null,$username,$password);
+        } else {
+            $res = $this->authService->signin($username,null,$password);
+        }
+
+        return response()->json(['token'=>$res]);
     }
 }
