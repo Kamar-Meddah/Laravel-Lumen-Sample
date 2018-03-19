@@ -17,19 +17,24 @@ class AuthController extends Controller
     }
 
 
-
-    public function signin(Request $request)
+    public function login(Request $request)
     {
         $username = $request->get('username');
         $password = $request->get('password');
-        $res =null;
+        $res = null;
 
-        if (preg_match('/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/', $username)) {
-            $res = $this->authService->signin(null,$username,$password);
+        $user = $this->authService->checkEmailOrUsernameExist($username);
+        if ($user !== null) {
+            $serviceRes = $this->authService->login($user, $password);
+            if ($serviceRes) {
+                $res = ['token' => $serviceRes, "message" => 'Successfully Logged'];
+            } else {
+                $res = ['token' => null, "message" => 'Wrong Password'];
+            }
         } else {
-            $res = $this->authService->signin($username,null,$password);
+            $res = ['token' => null, 'message' => 'Account does not exist'];
         }
 
-        return response()->json(['token'=>$res]);
+        return response()->json($res);
     }
 }

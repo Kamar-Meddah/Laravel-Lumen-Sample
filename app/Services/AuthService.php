@@ -4,35 +4,40 @@ namespace App\Services;
 
 use App\Models\User;
 use Exception;
+use Firebase\JWT\JWT;
 
 class AuthService
 {
 
-    public function signin(?string $username, ?string $email, string $password)
+    public function login(User $user, string $password)
     {
         try {
-            if ($email) {
-                $user = User::all()->where('email', '=', $username)->first();
-            } else {
-                $user = User::all()->where('username', '=', $username)->first();
+            if (password_verify($password, $user->password)) {
+                $array = $user;
+                $jwtToken = JWT::encode($array, env('APP_KEY'), 'HS256');
+                $user->token = $jwtToken;
+                $user->saveOrFail();
+                return $jwtToken;
+            }else{
+                return false;
             }
-
-                if (password_verify($password, $user)) {
-                    $array = $user;
-                    $a = JWT::encode($array, env('APP_KEY'), 'HS256');
-                    $user->token = $a;
-                    $user->save();
-                }
-
-
         } catch (Exception $e) {
-            return 'do not exist';
+            return null;
         }
     }
 
-    public function findWith(string $column, string $value): bool
+    public function checkEmailOrUsernameExist(string $username): ?User
     {
-        return User::all()->where($column, '=', $value)->first() !== null;
+        if (preg_match('/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/', $username)) {
+            return $this->findWith('email', $username);
+        } else {
+            return $this->findWith('username', $username);
+        }
+    }
+
+    private function findWith(string $column, string $value): ?User
+    {
+        return User::all()->where($column, '=', $value)->first();
     }
 
 }
