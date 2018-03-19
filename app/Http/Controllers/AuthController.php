@@ -34,7 +34,12 @@ class AuthController extends Controller
         } else {
             $res = ['token' => null, 'message' => 'Account does not exist'];
         }
-
         return response()->json($res);
+    }
+
+    public function checkToken(Request $request)
+    {
+        $res = $this->authService->checkToken($request->input('token'));
+        return response()->json(['valid' => $res]);
     }
 }

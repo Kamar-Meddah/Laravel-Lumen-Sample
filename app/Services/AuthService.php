@@ -13,13 +13,20 @@ class AuthService
     {
         try {
             if (password_verify($password, $user->password)) {
-                $array = $user;
+                $array = [
+                    "iss" => $user->username,
+                    "sub" => $user->id,
+                    "iat" => time(),
+                    "exp" => time() + 60 * 60 * 24,
+                    'jti' => uniqid(),
+                    'role' => $user->role,
+                ];
                 $jwtToken = JWT::encode($array, env('APP_KEY'), 'HS256');
                 $user->token = $jwtToken;
                 $user->saveOrFail();
                 return $jwtToken;
-            }else{
-                return false;
+            } else {
+                return null;
             }
         } catch (Exception $e) {
             return null;
@@ -38,6 +45,16 @@ class AuthService
     private function findWith(string $column, string $value): ?User
     {
         return User::all()->where($column, '=', $value)->first();
+    }
+
+    public function checkToken(string $token)
+    {
+        try {
+            JWT::decode($token,env('APP_KEY'),['HS256']);
+            return true;
+        } catch (Exception $e) {
+           return false;
+        }
     }
 
 }
