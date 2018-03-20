@@ -28,7 +28,8 @@ class CommentsService
             $comment->content = $content;
             $comment->user_id = $user_id;
             $comment->post_id = $post_id;
-            return $comment->saveOrFail();
+            $comment->saveOrFail();
+            return $comment->id;
         } catch (Exception $e) {
             return false;
         }

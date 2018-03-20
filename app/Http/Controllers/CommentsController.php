@@ -23,10 +23,9 @@ class CommentsController extends Controller
     public function post(Request $request)
     {
         $content = (string)$request->get('content');
-        $user_id = (integer)$request->get('user_id');
         $post_id = (integer)$request->get('post_id');
-        $response = (bool)$this->commentsService->post($content, $post_id, $user_id);
-        return response()->json(['created' => $response]);
+        $response = $this->commentsService->post($content, $post_id, Auth::user()->id);
+        return response()->json(['created' => (bool)$response, 'id' => $response]);
     }
 
     public function findAll(int $id)

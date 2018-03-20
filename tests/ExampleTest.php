@@ -1,8 +1,5 @@
 <?php
 
-use Laravel\Lumen\Testing\DatabaseMigrations;
-use Laravel\Lumen\Testing\DatabaseTransactions;
-
 class ExampleTest extends TestCase
 {
     /**
@@ -13,10 +10,15 @@ class ExampleTest extends TestCase
 
     public function testExample()
     {
-        $this->get('/');
-        $this->assertEquals(
-            $this->app->version(), $this->response->getContent()
-        );
-        
+        $this->call('post', '/Api/comments/post', ['post_id' => 1, 'content' => 'balbla']);
+        $this->assertResponseStatus(401);
+
+    }
+
+    public function testNonExistedRouter()
+    {
+        $this->call('post', '/Api/comment/post', ['post_id' => 1, 'content' => 'balbla']);
+        $this->assertResponseStatus(404);
+
     }
 }
