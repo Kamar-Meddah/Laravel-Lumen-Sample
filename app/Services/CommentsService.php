@@ -16,19 +16,19 @@ class CommentsService
             ->get();
     }
 
-    public function delete(int $id): void
+    public function delete(int $id): bool
     {
-        Comment::destroy($id);
+       return  (boolean)Comment::destroy($id);
     }
 
-    public function post(string $content, int $id)
+    public function post(string $content, int $post_id, int $user_id)
     {
         try {
             $comment = new Comment();
             $comment->content = $content;
-            $comment->user_id = $id;
-            $comment->post_id = $id;
-            return $comment->save();
+            $comment->user_id = $user_id;
+            $comment->post_id = $post_id;
+            return $comment->saveOrFail();
         } catch (Exception $e) {
             return false;
         }

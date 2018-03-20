@@ -37,6 +37,7 @@ $router->group(['prefix' => 'Api'], function () use ($router) {
     $router->group(['prefix' => 'comments'], function () use ($router) {
         $router->get('post/{id:\d+}', 'CommentsController@findAll');
         $router->post('post', 'CommentsController@post');
+        $router->delete('/{id:\d+}', 'CommentsController@delete');
     });
 
 });
