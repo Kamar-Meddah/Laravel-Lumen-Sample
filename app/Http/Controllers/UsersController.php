@@ -18,6 +18,9 @@ class UsersController extends Controller
     public function __construct(UsersService $usersService)
     {
         $this->usersService = $usersService;
+        $this->middleware('auth', ['only' => [
+            'passwordReset'
+        ]]);
     }
 
     public function signup(Request $request)
@@ -35,6 +38,20 @@ class UsersController extends Controller
             $res = ['created' => $this->usersService->create($username, $email, $password), 'message' => 'Successfully created'];
         }
 
+        return response()->json($res);
+    }
+
+    public function passwordReset(Request $request)
+    {
+        $new = (string)$request->input('new');
+        $old = (string)$request->input('old');
+        $res=[];
+
+        if($this->usersService->updatePassword($new,$old)){
+            $res = ['updated'=> true, 'message'=> 'Password successfully updated'];
+        }else{
+            $res = ['updated'=> false, 'message'=> 'Wrong Password'];
+        }
         return response()->json($res);
     }
 

@@ -32,6 +32,7 @@ $router->group(['prefix' => 'Api'], function () use ($router) {
 
     $router->group(['prefix' => 'users'], function () use ($router) {
         $router->post('signup', 'UsersController@signup');
+        $router->put('password_reset', 'UsersController@passwordReset');
     });
 
     $router->group(['prefix' => 'comments'], function () use ($router) {
