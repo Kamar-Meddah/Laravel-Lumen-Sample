@@ -14,6 +14,9 @@ class AuthController extends Controller
     public function __construct(AuthService $authService)
     {
         $this->authService = $authService;
+        $this->middleware('auth', ['only' => [
+            'logout'
+        ]]);
     }
 
 
@@ -41,5 +44,10 @@ class AuthController extends Controller
     {
         $res = $this->authService->checkToken($request->input('token'));
         return response()->json(['valid' => $res]);
+    }
+
+    public function logout()
+    {
+        return response()->json(["disconnected" => $this->authService->logout()]);
     }
 }

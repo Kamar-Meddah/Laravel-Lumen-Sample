@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\User;
 use Exception;
 use Firebase\JWT\JWT;
+use Illuminate\Support\Facades\Auth;
 
 class AuthService
 {
@@ -50,10 +51,20 @@ class AuthService
     public function checkToken(string $token)
     {
         try {
-            JWT::decode($token,env('APP_KEY'),['HS256']);
+            JWT::decode($token, env('APP_KEY'), ['HS256']);
             return true;
         } catch (Exception $e) {
-           return false;
+            return false;
+        }
+    }
+
+    public function logout()
+    {
+        try {
+            Auth::user()->token = null;
+            return Auth::user()->saveOrFail();
+        } catch (Exception $e) {
+            return false;
         }
     }
 
