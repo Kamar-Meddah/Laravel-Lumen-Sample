@@ -23,6 +23,10 @@ $router->group(['prefix' => 'Api'], function () use ($router) {
 
     $router->group(['prefix' => 'categories'], function () use ($router) {
         $router->get('all', 'CategoriesController@all');
+        $router->get('all/{page:\d+}', 'CategoriesController@allPaginated');
+        $router->delete('{id:\d+}', 'CategoriesController@delete');
+        $router->put('', 'CategoriesController@update');
+        $router->post('', 'CategoriesController@create');
     });
 
     $router->group(['prefix' => 'auth'], function () use ($router) {
