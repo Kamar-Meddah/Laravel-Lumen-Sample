@@ -125,4 +125,18 @@ class PostsService
         }
     }
 
+    public function update(string $title, string $content, int $category_id, int $id): bool
+    {
+        try {
+            $post = Post::find($id);
+            $post->title = $title;
+            $post->slug = URLify::filter($title) != '' ? URLify::filter($title) : $title;
+            $post->content = $content;
+            $post->category_id = $category_id;
+            return $post->saveOrFail();
+        } catch (Exception $e) {
+            return false;
+        }
+    }
+
 }

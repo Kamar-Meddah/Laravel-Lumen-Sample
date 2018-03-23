@@ -21,6 +21,7 @@ $router->group(['prefix' => 'Api'], function () use ($router) {
         $router->get('find/{id:\d+}', 'PostsController@find');
         $router->get('lastByCatgory/{id:\d+}/{page:\d+}', 'PostsController@lastByCatgory');
         $router->post('', 'PostsController@insert');
+        $router->post('/update', 'PostsController@update');
     });
 
     $router->group(['prefix' => 'categories'], function () use ($router) {
@@ -46,6 +47,10 @@ $router->group(['prefix' => 'Api'], function () use ($router) {
         $router->get('post/{id:\d+}', 'CommentsController@findAll');
         $router->post('post', 'CommentsController@post');
         $router->delete('/{id:\d+}', 'CommentsController@delete');
+    });
+
+    $router->group(['prefix' => 'images'], function () use ($router) {
+        $router->delete('/{id:\d+}', 'ImagesController@delete');
     });
 
 });
