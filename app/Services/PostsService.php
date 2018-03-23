@@ -8,6 +8,7 @@ use App\Models\Post;
 use Exception;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
+use URLify;
 
 class PostsService
 {
@@ -102,6 +103,26 @@ class PostsService
             $post->content = substr($post->content, 0, 300);
         }, $posts->items());
         return $posts;
+    }
+
+    public function create(string $title, string $content, int $id): ?int
+    {
+        try {
+            $post = new Post();
+            $post->title = $title;
+            $post->slug = URLify::filter($title) != '' ? URLify::filter($title) : $title;
+            $post->content = $content;
+            $post->category_id = $id;
+            $post->user_id = Auth::user()->id;
+            $save = $post->saveOrFail();
+            if ($save) {
+                return $post->id;
+            } else {
+                return null;
+            }
+        } catch (Exception $e) {
+            return null;
+        }
     }
 
 }

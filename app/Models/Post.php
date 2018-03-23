@@ -15,7 +15,7 @@ class Post extends Model
 
     public function category()
     {
-        return $this->belongsTo(Category::class, 'category_id','id')->select(['id','title']);
+        return $this->belongsTo(Category::class, 'category_id','id')->select(['id','title','slug']);
     }
 
     public function images()

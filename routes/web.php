@@ -20,6 +20,7 @@ $router->group(['prefix' => 'Api'], function () use ($router) {
         $router->get('search/{query:[A-z0-9]+}/{page:\d+}', 'PostsController@search');
         $router->get('find/{id:\d+}', 'PostsController@find');
         $router->get('lastByCatgory/{id:\d+}/{page:\d+}', 'PostsController@lastByCatgory');
+        $router->post('', 'PostsController@insert');
     });
 
     $router->group(['prefix' => 'categories'], function () use ($router) {

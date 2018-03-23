@@ -2,19 +2,25 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\ImagesService;
 use App\Services\PostsService;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
 use Laravel\Lumen\Routing\Controller;
+use Symfony\Component\HttpFoundation\File\File;
 
 class PostsController extends Controller
 {
     private $postsService;
+    private $imagesService;
 
 
-    public function __construct(PostsService $postsService)
+    public function __construct(PostsService $postsService, ImagesService $imagesService)
     {
         $this->postsService = $postsService;
+        $this->imagesService = $imagesService;
         $this->middleware('auth', ['only' => [
-            'all', 'delete'
+            'all', 'delete', 'insert'
         ]]);
 
     }
@@ -52,6 +58,28 @@ class PostsController extends Controller
     {
         $post = $this->postsService->find($id);
         return response()->json($post);
+    }
+
+    public function insert(Request $request)
+    {
+        $title = $request->get('title');
+        $content = $request->get('content');
+        $category_id = (integer)$request->get('category');
+        $res = $this->postsService->create($title, $content, $category_id);
+        if ($res !== null) {
+            if ($request->hasFile('files')) {
+                array_map(function (File $file) use ($res) {
+                    if (explode("/", $file->getMimeType())[0] === 'image' && $file->getSize() < 2097152) {
+                        $unique = uniqid();
+                        $r = $this->imagesService->create($unique, $res);
+                        if ($r) {
+                            $file->move(App::basePath() . '\public\files\images', $unique . '.jpg');
+                        }
+                    }
+                }, $request->file('files'));
+            }
+        }
+        return response()->json(['id' => $res]);
     }
 
 }
