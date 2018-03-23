@@ -13,6 +13,9 @@ class PostsController extends Controller
     public function __construct(PostsService $postsService)
     {
         $this->postsService = $postsService;
+        $this->middleware('auth', ['only' => [
+            'all', 'delete'
+        ]]);
 
     }
 
@@ -20,6 +23,11 @@ class PostsController extends Controller
     {
         $posts = $this->postsService->all($page);
         return response()->json($posts);
+    }
+
+    public function delete(int $id)
+    {
+        return response()->json(['deleted' => $this->postsService->delete((integer)$id)]);
     }
 
     public function last(int $page)
@@ -34,13 +42,15 @@ class PostsController extends Controller
         return response()->json($posts);
     }
 
-    public function search(string $query, int $page) {
-        $posts = $this->postsService->search($query,$page);
+    public function search(string $query, int $page)
+    {
+        $posts = $this->postsService->search($query, $page);
         return response()->json($posts);
     }
 
-    public function find(int $id){
-        $post =$this->postsService->find($id);
+    public function find(int $id)
+    {
+        $post = $this->postsService->find($id);
         return response()->json($post);
     }
 

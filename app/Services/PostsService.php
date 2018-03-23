@@ -2,7 +2,12 @@
 
 namespace App\Services;
 
+use App\Models\Comment;
+use App\Models\Image;
 use App\Models\Post;
+use Exception;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Auth;
 
 class PostsService
 {
@@ -10,17 +15,59 @@ class PostsService
     public function all(int $page): ?object
     {
         return Post::with('category')
+            ->where('user_id', "=", Auth::user()->id)
+            ->orderBy('title', 'asc')
             ->paginate(10, ['id', 'title', 'created_at', 'category_id'], null, $page);
     }
 
     public function find(int $id): ?Post
     {
-        return Post::with('category', 'user','images')->find($id);
+        return Post::with('category', 'user', 'images')->find($id);
     }
 
-    public function delete(int $id): void
+    public function delete(int $id): bool
     {
-        Post::destroy($id);
+        try {
+            $post = Post::find($id);
+            if ($post->user_id === Auth::user()->id) {
+                $this->deleteAllCommentsFromPost($id);
+                $this->deleteAllImagesFromPost($id);
+                return $post->delete();
+            } else {
+                return false;
+            }
+        } catch (Exception $e) {
+            return false;
+        }
+    }
+
+    private function deleteAllCommentsFromPost(int $id): void
+    {
+        try {
+            $comments = Comment::all()
+                ->where('post_id', "=", $id);
+            $comments->map(function ($comment) {
+                $comment->delete();
+            });
+        } catch (Exception $e) {
+            dd($e->getMessage());
+        }
+    }
+
+    private function deleteAllImagesFromPost(int $id): void
+    {
+        try {
+            $images = Image::all()
+                ->where('post_id', "=", $id);
+            $images->map(function ($image) {
+                if (file_exists(App::basePath() . '\public\files\images\\' . $image->title)) {
+                    unlink(App::basePath() . '\public\files\images\\' . $image->title);
+                }
+                $image->delete();
+            });
+        } catch (Exception $e) {
+            dd($e->getMessage());
+        }
     }
 
     public function last(int $page): ?object

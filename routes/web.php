@@ -15,6 +15,7 @@ $router->group(['prefix' => 'Api'], function () use ($router) {
 
     $router->group(['prefix' => 'posts'], function () use ($router) {
         $router->get('all/{page:\d+}', 'PostsController@all');
+        $router->delete('{id:\d+}', 'PostsController@delete');
         $router->get('last/{page:\d+}', 'PostsController@last');
         $router->get('search/{query:[A-z0-9]+}/{page:\d+}', 'PostsController@search');
         $router->get('find/{id:\d+}', 'PostsController@find');
