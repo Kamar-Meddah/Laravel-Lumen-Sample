@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Services\UsersService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 use Laravel\Lumen\Routing\Controller;
 
 class UsersController extends Controller
@@ -36,6 +37,9 @@ class UsersController extends Controller
             $res = ['created' => false, 'message' => 'Email exist'];
         } else {
             $res = ['created' => $this->usersService->create($username, $email, $password), 'message' => 'Successfully created'];
+            Mail::send(['emails.hello','emails.helloText'], ['username' => $username], function ($message) use ($email) {
+                $message->to($email)->subject('Welcome');
+            });
         }
 
         return response()->json($res);
@@ -45,12 +49,12 @@ class UsersController extends Controller
     {
         $new = (string)$request->input('new');
         $old = (string)$request->input('old');
-        $res=[];
+        $res = [];
 
-        if($this->usersService->updatePassword($new,$old)){
-            $res = ['updated'=> true, 'message'=> 'Password successfully updated'];
-        }else{
-            $res = ['updated'=> false, 'message'=> 'Wrong Password'];
+        if ($this->usersService->updatePassword($new, $old)) {
+            $res = ['updated' => true, 'message' => 'Password successfully updated'];
+        } else {
+            $res = ['updated' => false, 'message' => 'Wrong Password'];
         }
         return response()->json($res);
     }

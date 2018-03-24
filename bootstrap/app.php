@@ -78,7 +78,7 @@ $app->routeMiddleware([
 |
 */
 
-// $app->register(App\Providers\AppServiceProvider::class);
+$app->register(App\Providers\AppServiceProvider::class);
 $app->register(App\Providers\CommentsServiceProvider::class);
 $app->register(App\Providers\PostsServiceProvider::class);
 $app->register(App\Providers\CategoriesServiceProvider::class);

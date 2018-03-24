@@ -11,6 +11,7 @@
 |
 */
 
+
 $router->group(['prefix' => 'Api'], function () use ($router) {
 
     $router->group(['prefix' => 'posts'], function () use ($router) {
