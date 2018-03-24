@@ -48,11 +48,27 @@ class AuthService
         return User::all()->where($column, '=', $value)->first();
     }
 
+    public function checkResetToken(string $code): ?User
+    {
+        return $this->findWith('reset_token', $code);
+    }
+
+    public function setResetToken(User $user, string $token): bool
+    {
+        try {
+            $user->reset_token = $token;
+            return $user->saveOrFail();
+        } catch (Exception $e) {
+            return true;
+        }
+    }
+
     public function checkToken(string $token)
     {
         try {
             JWT::decode($token, env('APP_KEY'), ['HS256']);
-            return true;
+            $user = User::all()->where('token', '=', $token)->first();
+            return $user !== null;
         } catch (Exception $e) {
             return false;
         }
@@ -66,6 +82,22 @@ class AuthService
         } catch (Exception $e) {
             return false;
         }
+    }
+
+    public function changePassword(User $user, string $password): bool
+    {
+        try {
+            $user->password = $this->generateHash($password);
+            $user->reset_token = null;
+            return $user->saveOrFail();
+        } catch (Exception $e) {
+            return false;
+        }
+    }
+
+    private function generateHash(string $value): string
+    {
+        return password_hash($value, PASSWORD_BCRYPT);
     }
 
 }

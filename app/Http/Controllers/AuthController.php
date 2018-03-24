@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Services\AuthService;
+use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 use Laravel\Lumen\Routing\Controller;
 
 class AuthController extends Controller
@@ -49,6 +51,46 @@ class AuthController extends Controller
     public function logout()
     {
         return response()->json(["disconnected" => $this->authService->logout()]);
+    }
+
+
+    public function reset(Request $request)
+    {
+        $code = $request->get('code');
+        $password = $request->get('password');
+        $res = false;
+        $user = $this->authService->checkResetToken($code);
+        if ($user !== null) {
+            if ($this->authService->changePassword($user, $password)) {
+                $res = ['valid' => true];
+            };
+        } else {
+            $res = ['valid' => false];
+        }
+        return response()->json($res);
+    }
+
+
+    public function checkEmail(Request $request)
+    {
+        $email = $request->get('email');
+        $res = null;
+
+        $user = $this->authService->checkEmailOrUsernameExist($email);
+        if ($user !== null) {
+            $token = uniqid();
+            $this->authService->setResetToken($user, $token);
+            try {
+                Mail::send(['emails.passwordReset.passwordReset', 'emails.passwordReset.passwordResetText'], ['token' => $token], function ($message) use ($email) {
+                    $message->to($email)->subject('password recovery');
+                });
+            } catch (Exception $e) {
+            }
+            $res = ['valid' => true];
+        } else {
+            $res = ['valid' => false];
+        }
+        return response()->json($res);
     }
 
 }

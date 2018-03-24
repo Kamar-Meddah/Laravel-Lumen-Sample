@@ -40,13 +40,8 @@ class AuthServiceProvider extends ServiceProvider
     {
         if ($request->header('Authorization')) {
             try {
-                $user = JWT::decode($request->header('Authorization'), env('APP_KEY'), ['HS256']);
-                $dbUser = User::all()->find($user->sub);
-                if ($dbUser->token === $request->header('Authorization')) {
-                    return $dbUser;
-                } else {
-                    return null;
-                }
+                $us = JWT::decode($request->header('Authorization'), env('APP_KEY'), ['HS256']);
+                return User::all()->where('token', '=', $request->header('Authorization'))->first();
             } catch (\Exception $e) {
                 return null;
             }

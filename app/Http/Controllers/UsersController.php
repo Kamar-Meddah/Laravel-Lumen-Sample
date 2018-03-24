@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Services\UsersService;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use Laravel\Lumen\Routing\Controller;
@@ -37,9 +38,13 @@ class UsersController extends Controller
             $res = ['created' => false, 'message' => 'Email exist'];
         } else {
             $res = ['created' => $this->usersService->create($username, $email, $password), 'message' => 'Successfully created'];
-            Mail::send(['emails.hello','emails.helloText'], ['username' => $username], function ($message) use ($email) {
-                $message->to($email)->subject('Welcome');
-            });
+            try {
+                Mail::send(['emails.hello.hello', 'emails.hello.helloText'], ['username' => $username], function ($message) use ($email) {
+                    $message->to($email)->subject('Welcome');
+                });
+            } catch (Exception $e) {
+
+            }
         }
 
         return response()->json($res);

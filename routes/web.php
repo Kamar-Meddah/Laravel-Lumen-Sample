@@ -37,11 +37,14 @@ $router->group(['prefix' => 'Api'], function () use ($router) {
         $router->post('login', 'AuthController@login');
         $router->post('check', 'AuthController@checkToken');
         $router->put('logout', 'AuthController@logout');
+        $router->put('checkEmail', 'AuthController@checkEmail');
+        $router->put('reset', 'AuthController@reset');
     });
 
     $router->group(['prefix' => 'users'], function () use ($router) {
         $router->post('signup', 'UsersController@signup');
         $router->put('password_reset', 'UsersController@passwordReset');
+
     });
 
     $router->group(['prefix' => 'comments'], function () use ($router) {
